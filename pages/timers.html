@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timers</title>
+    <link rel="stylesheet" href="/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
+    <script type="text/javascript" src="/js/materialize.min.js"></script>
+    <link rel="manifest" href="/manifest.json">
+</head>
+
+<body class="grey lighten-4">
+    <nav class="z-depth-0">
+        <div class="nav-wrapper container">
+            <a href="/"><span>Welcome to Eorzea</a>
+            <span class="right black-text text-darken-1">
+                <i class="material-icons sidenav-trigger" data-target="side-menu">menu</i>
+            </span>
+        </div>
+    </nav>
+
+    <ul id="side-menu" class="sidenav side-menu">
+        <li><a class="subheader">FFXIV</a></li>
+        <li><a href="/" class="waves-effect">Home</a></li>
+        <li><a href="/pages/about.html" class="waves-effect">About</a></li>
+        <li><a href="/pages/timers.html" class="waves-effect">Timers</a></li>
+        <li class="logged-in">
+            <a href="#" class="waves-effect modal-trigger" data-target="modal-account">Account</a>
+        </li>
+        <li class="logged-in">
+            <a href="#" class="waves-effect" id="logout">Logout</a>
+        </li>
+        <li class="logged-out">
+            <a href="#" class="waves-effect modal-trigger" data-target="modal-login">Login</a>
+        </li>
+        <li class="logged-out">
+            <a href="#" class="waves-effect modal-trigger" data-target="modal-signup">Sign up</a>
+        </li>
+        <li><div class="divider"></div></li>
+        <li><a href="/pages/contact.html" class="waves-effect"><i class="material-icons">mail_outline</i>Contact</a>
+        </li>
+    </ul>
+
+    <!-- Content -->
+    <div class="container grey-text">
+        <h5 class="center">Gathering Timers</h5>
+        <p>
+            <img src="data:image/jpeg;base64,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" style="width:500px;height:300px;">
+        </p>
+        <p>
+          The following is a list of materials that may be gathered at the appropriate times!
+        </p>
+        <p>
+            Cuprite	59	--	Dravanian Hinterlands (38, 30)	Anyx Trine	02:00	Mining	<p></p>
+            Dark Matter Cluster	50★★	--	Dravanian Forelands (36, 13)	Tailfeather	02:00	Mining<p></p>
+            Light Kidney Ore	57	--	Dravanian Hinterlands (38, 30)	Anyx Trine	02:00	Mining	<p></p>
+            Old World Fig	50★★★	--	Dravanian Forelands (27, 14)	Tailfeather	02:00	Botany	<p></p>
+            Old World Fig Seeds	50	--	Dravanian Forelands (27, 14)	Tailfeather	02:00	Botany	<p></p>
+            Othardian Plum	70	--	The Azim Steppe (27, 16)	The Dawn Throne	02:00	Botany	<p></p>
+            Rarefied Abalathian Spring Water	57	600	Sea of Clouds (21,12)	Ok'Zundu	02:00	Mining<p></p>
+            Rarefied Amber Cloves	80	600	Amh Araeng (19, 20)	Mord Souq	02:00	Botany<p></p>
+            Rarefied Aurum Regis Sand	59	600	Sea of Clouds (21, 12)	Ok'Zundu	02:00	Mining<p></p>
+            Rarefied Coconut	85	600	Thavnair (14, 14)	The Great Work	02:00	Botany<p></p>
+            Rarefied Eblan Alumen	90	600	Garlemald (13, 22)	Camp Broken Glass	02:00	Mining	 <p></p>
+            Rarefied Larch Log	61	600	The Ruby Sea (6, 16)	Onokoro	02:00	Botany <p></p>
+            Rarefied Larch Sap	65	600	The Ruby Sea (6, 16)	Onokoro	02:00	Botany<p></p>
+            Rarefied Palm Log	81	600	Thavnair (14, 14)	The Great Work	02:00	Botany	<p></p>
+            Rarefied Phrygian Ore	87	600	Garlemald (13, 22)	Camp Broken Glass	02:00	Mining<p></p>
+            Rarefied Reef Rock	79	600	The Tempest (33, 20)	The Ondo Cups	02:00	Mining<p></p>
+            Rarefied Sandteak Log	77	600	Amh Araeng (19, 20)	Mord Souq	02:00	Botany<p></p>
+            Rarefied Tungsten Ore	80★	600	The Tempest (33, 20)	The Ondo Cups	02:00	Mining<p></p>
+            Raw Hematite	70★★	--	Kholusia (33, 23)	Stilltide	02:00	Mining<p></p>
+            Raw Triphane	60★★	--	The Fringes (26, 9)	Castrum Oriens	02:00	Mining<p></p>
+            Cloud Banana	57	--	Dravanian Hinterlands (12, 36)	Idyllshire	04:00	Botany	<p></p>
+            Dark Matter Cluster	50★★	--	Coerthas Western Highlands (28, 23)	Falcon's Nest	04:00	Mining	<p></p>
+            Jhammel Ginger	70	--	The Lochs (5, 8)	Porta Praetoria	04:00	Botany	<p></p>
+            Morel	59	--	Dravanian Hinterlands (12, 36)	Idyllshire	04:00	Botany<p></p>
+            Rarefied Chalcocite	53	600	Dravanian Forelands (31, 32)	Tailfeather	04:00	Mining	 <p></p>
+            Rarefied Coral	80★	600	The Tempest (37, 12)	The Ondo Cups	04:00	Botany	 <p></p>
+            Rarefied Kelp	79	600	The Tempest (37, 12)	The Ondo Cups	04:00	Botany	<p></p>
+            Rarefied Limonite	55	600	Dravanian Forelands (31, 32)	Tailfeather	04:00	Mining	<p></p>
+            Rarefied Pewter Ore	90★	600	Thavnair (32, 25)	Palaka's Stand	04:00	Mining	<p></p>
+            Rarefied Pyrite	51	600	Dravanian Forelands (31, 32)	Tailfeather	04:00	Mining	 <p></p>
+            Rarefied Raw Petalite	75	600	Lakeland (31, 24)	Fort Jobb	04:00	Mining	 <p></p>
+            Rarefied Red Pine Log	83	600	Garlemald (35, 6)	Tertium	04:00	Botany	 <p></p>
+            Rarefied Shiitake Mushroom	63	600	The Ruby Sea (33, 9)	Onokoro	04:00	Botany<p></p>
+            Rarefied Titancopper Ore	71	600	Lakeland (31, 24)	Fort Jobb	04:00	Mining<p></p>
+            Raw Azurite	66	--	The Azim Steppe (5, 29)	Dhoro Iloh	04:00	Mining<p></p>
+            Raw Lazurite	75	--	Rak'tika Greatwood (19, 20)	Fanow	04:00	Mining<p></p>
+            Yellow Copper Ore	50★★★	--	Coerthas Western Highlands (28, 23)	Falcon's Nest	04:00	Mining<p></p>
+            Abalathian Mistletoe	58	--	Sea of Clouds (35, 23)	Camp Cloudtop	06:00	Botany<p></p>
+            Beech Branch	60★★	--	The Fringes (11, 17)	Castrum Oriens	06:00	Botany<p></p>
+            Green Quartz	55	--	Churning Mists (35, 21)	Moghome	06:00	Mining<p></p>
+            Hallowed Basil	70	--	The Peaks (23, 16)	Ala Gannha	06:00	Botany<p></p>
+            Heavens Lemon	56	--	Sea of Clouds (35, 23)	Camp Cloudtop	06:00	Botany<p></p>
+            Lemonette	80	--	Kholusia (20, 26)	Wright	06:00	Botany<p></p>
+            Rarefied Bismuth Ore	83	600	Mare Lamentorum (16, 33)	Sinus Lacrimarum	06:00	Mining<p></p>
+            Rarefied Dark Rye	89	600	Labyrinthos (10, 22)	Aporia	06:00	Botany<p></p>
+            Rarefied Iceberg Lettuce	90★	600	Labyrinthos (10, 22)	Aporia	06:00	Botany<p></p>
+            Rarefied Raw Azurite	67	600	The Azim Steppe (36, 26)	Reunion	06:00	Mining<p></p>
+            Rarefied Raw Lazurite	73	600	Rak'tika Greatwood (16, 18)	Slitherbough	06:00	Mining<p></p>
+            Rarefied Silvergrace Ore	69	600	The Azim Steppe (36, 26)	Reunion	06:00	Mining<p></p>
+            Raw Diaspore	72	--	Il Mheg (26, 13)	Wolekdorf	06:00	Mining<p></p>
+            Raw Imperial Jade	70	--	Yanxia (29, 9)	The House of the Fierce	06:00	Mining<p></p>
+            Raw Petalite	78	--	Lakeland (28, 33)	Fort Jobb	06:00	Mining<p></p>
+            Yellow Quartz	52	--	Churning Mists (35, 21)	Moghome	06:00	Mining<p></p>
+            Abalathian Rock Salt	56	--	Sea of Clouds (7, 6)	Ok'Zundu	10:00	Mining<p></p>
+            Adamantite Ore	60	--	Azys Lla (23, 5)	Helix	12:00	Mining<p></p>
+            Ala Mhigan Salt Crystal	70	--	The Lochs (20, 28)	Porta Praetoria	12:00	Mining<p></p>
+            Bamboo Shoot	63	--	Yanxia (28, 25)	Namai	10:00	Botany<p></p>
+            Broad Beans	72	--	Il Mheg (24, 36)	Lydha Lran	12:00	Botany<p></p>
+            Chalcocite	53	--	Dravanian Forelands (26, 19)	Anyx Trine	08:00	Mining<p></p>
+            Chives	55	--	Coerthas Western Highlands (31, 20)	Falcon's Nest	10:00	Botany<p></p>
+            Chysahl Greens	60	--	Coerthas Western Highlands (8, 9)	Tailfeather	08:00	Botany<p></p>
+            Coerthan Tea Leaves	53	--	Coerthas Western Highlands (31, 20)	Falcon's Nest	10:00	Botany<p></p>
+            Coerthan Tea Seeds	55	--	Coerthas Western Highlands (31, 20)	Falcon's Nest	10:00	Botany<p></p>
+            Dravanian Mistletoe	54	--	Churning Mists (24, 7)	Zenith	12:00	Botany<p></p>
+            Honeydew Almonds	60★	--	Sea of Clouds (24, 6)	Ok'Zundu	12:00	Botany<p></p>
+            Limonite	54	--	Dravanian Forelands (26, 19)	Anyx Trine	08:00	Mining<p></p>
+            Lotus Root	66	--	Yanxia (28, 7)	The House of the Fierce	08:00	Botany<p></p>
+            Mist Spinach	78	--	Rak'tika Greatwood (34, 21)	Fanow	12:00	Botany<p></p>
+            Pearl Sprout Seeds	55	--	Coerthas Western Highlands (31, 20)	Falcon's Nest	10:00	Botany<p></p>
+            Pearl Sprouts	52	--	Coerthas Western Highlands (31, 20)	Falcon's Nest	10:00	Botany<p></p>
+            Peppermint	75	--	Lakeland (26, 20)	Fort Jobb	10:00	Botany<p></p>
+            Porcini	51	--	Churning Mists (24, 7)	Zenith	12:00	Botany<p></p>
+            Pyrite	51	--	Dravanian Forelands (26, 19)	Anyx Trine	08:00	Mining<p></p>
+            Rarefied Annite	90★	600	Elpis (8, 37)	The Twelve Wonders	10:00	Mining<p></p>
+            Rarefied AR-Caean Cotton Boll	90★	600	Ultima Thule (9, 33)	Reah Tahra	08:00	Botany<p></p>
+            Rarefied Blue Zircon	89	600	Elpis (8, 37)	The Twelve Wonders	10:00	Mining<p></p>
+            Rarefied Chestnut Branch	55	600	Dravanian Forelands (29, 30)	Tailfeather	10:00	Botany<p></p>
+            Rarefied Chestnut Log	53	600	Dravanian Forelands (29, 30)	Tailfeather	10:00	Botany<p></p>
+            Rarefied Chestnut Sap	51	600	Dravanian Forelands (29, 30)	Tailfeather	10:00	Botany<p></p>
+            Rarefied Dark Chestnut	57	600	Dravanian Forelands (16, 36)	Anyx Trine	12:00	Botany<p></p>
+            Rarefied Dark Chestnut Resin	59	600	Dravanian Forelands (16, 36)	Anyx Trine	12:00	Botany<p></p>
+            Rarefied Elder Nutmeg	90	600	Elpis (25, 6)	Poieten Oikos	12:00	Botany<p></p>
+            Rarefied Gyr Abanian Alumen	80★	600	The Fringes (32, 31)	Peering Stones	10:00	Mining<p></p>
+            Rarefied Miracle Apple Log	75	600	Il Mheg (4, 23)	Lydha Lran	10:00	Botany<p></p>
+            Rarefied Pine Log	69	600	Yanxia (19, 14)	The House of the Fierce	12:00	Botany<p></p>
+            Rarefied Pine Resin	67	600	Yanxia (19, 14)	The House of the Fierce	12:00	Botany<p></p>
+            Rarefied Pixie Apple	71	600	Il Mheg (4, 23)	Lydha Lran	10:00	Botany<p></p>
+            Rarefied Raw Ametrine	81	600	Labyrinthos (32, 21)	The Archeion	12:00	Mining<p></p>
+            Rarefied Raw Kyanite	65	600	The Fringes (30, 13)	Peering Stones	08:00	Mining<p></p>
+            Rarefied Raw Onyx	80	600	The Tempest (25, 4)	The Ondo Cups	08:00	Mining<p></p>
+            Rarefied Raw Star Spinel	63	600	The Ruby Sea (21, 34)	Tamamizu	10:00	Mining<p></p>
+            Rarefied Raw Triphane	61	600	The Fringes (30, 13)	Peering Stones	08:00	Mining<p></p>
+            Rarefied Sea Salt	77	600	The Tempest (25, 4)	The Ondo Cups	08:00	Mining<p></p>
+            Rarefied Sharlayan Rock Salt	85	600	Labyrinthos (32, 21)	The Archeion	12:00	Mining<p></p>
+            Rarefied Sykon	87	600	Elpis (25, 6)	Poieten Oikos	12:00	Botany<p></p>
+            Rarefied Uranday Log	80★	600	The Peaks (31, 7)	Ala Gannha	12:00	Botany<p></p>
+            Rarefied White Oak Log	73	600	Kholusia (28, 33)	Stilltide	08:00	Botany<p></p>
+            Raw Onyx	80	--	The Tempest (16, 21)	The Ondo Cups	12:00	Mining<p></p>
+            Raw Rhodonite	70	--	The Peaks (27, 12)	Ala Gannha	08:00	Mining<p></p>
+            Raw Star Spinel	63	--	The Ruby Sea (15, 5)	Onokoro	12:00	Mining<p></p>
+            Raw Triplite	76	--	Amh Araeng (19, 28)	Journey's Head	12:00	Mining<p></p>
+            Red Quartz	58	--	Sea of Clouds (7, 6)	Ok'Zundu	10:00	Mining<p></p>
+            Russet Popoto	76	--	Amh Araeng (19, 17)	Twine	08:00	Botany<p></p>
+            White Oak Branch	70★★	--	Kholusia (11, 29)	Wright	10:00	Botany<p></p>
+        </p>
+        
+    </div>
+
+    <script src="/js/ui.js"></script>

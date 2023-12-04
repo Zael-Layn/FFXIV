@@ -1,0 +1,14 @@
+{
+    "name": "FFXIV",
+    "short_name": "FFXIV",
+    "description": "Manage your daily crafting and gathering tasks",
+    "start_url": "/",
+    "scope": ".",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "background_color": "#FFE9D2",
+    "theme_color": "#FFE1C4",
+    "dir": "ltr",
+    "lang": "en-US"
+
+}
