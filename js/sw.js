@@ -15,7 +15,7 @@ const assets = [
 ];
 
 self.addEventListener('install', event => {
-  console.log(SW: Event fired: ${event.type});
+  console.log('SW: Event fired: ${event.type}');
   event.waitUntil(
     caches.open(staticCache)
       .then(cache => {
@@ -26,7 +26,7 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('activate', event => {
-  console.log(SW: Event fired: ${event.type});
+  console.log('SW: Event fired: ${event.type}');
   event.waitUntil(
     caches.keys()
       .then(keys => {
