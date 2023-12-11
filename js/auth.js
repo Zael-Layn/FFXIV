@@ -1,12 +1,8 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signOut,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signOut, signInWithEmailAndPassword } from "firebase/auth";
+import { addDoc, collection, getFirestore, query, getDocs } from "firebase/firestore";
+import * as firebaseui from "firebaseui";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBY7_GPppYAcruueYG7ZpOba4QEMbfbJSE",
@@ -17,14 +13,15 @@ const firebaseConfig = {
   appId: "1:717526266838:web:3e875787f79497115caa77",
   measurementId: "G-4SXEV2M1ML"
 };
-var ui = new firebaseui.auth.AuthUI(firebase.auth())
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-const auth = firebase.auth();
+const ui = new firebaseui.auth.AuthUI(firebase.auth());
 
-//listen for auth status changes
 onAuthStateChanged(auth, (user) => {
   // Check for user status
   // console.log(user);
@@ -33,7 +30,9 @@ onAuthStateChanged(auth, (user) => {
     getTasks(db).then((snapshot) => {
       setupTasks(snapshot);
     });
+
     setupUI(user);
+    
     const form = document.querySelector("form");
     form.addEventListener("submit", (event) => {
       event.preventDefault();
@@ -41,9 +40,13 @@ onAuthStateChanged(auth, (user) => {
       addDoc(collection(db, "tasks"), {
         title: form.title.value,
         description: form.description.value,
-      }).catch((error) => console.log(error));
-      form.title.value = "";
-      form.description.value = "";
+      })
+      .then(() => {
+        console.log("Task added successfully");
+        form.title.value = "";
+        form.description.value = "";
+      })
+      .catch((error) => console.log("Error adding task:", error));
     });
   } else {
     // console.log("User Logged out");
@@ -73,20 +76,7 @@ signupForm.addEventListener("submit", (e) => {
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
-      // ..
-    });
-});
 
-//logout
-const logout = document.querySelector("#logout");
-logout.addEventListener("click", (e) => {
-  e.preventDefault();
-  signOut(auth)
-    .then(() => {
-      // console.log("user has signed out");
-    })
-    .catch((error) => {
-      // An error happened.
     });
 });
 
@@ -100,7 +90,7 @@ loginForm.addEventListener("submit", (e) => {
     .then((userCredential) => {
       // Signed in
       const user = userCredential.user;
-      // console.log(user);
+      console.log(user);
       //close the login modal and reset the form
       const modal = document.querySelector("#modal-login");
       M.Modal.getInstance(modal).close();
@@ -112,3 +102,32 @@ loginForm.addEventListener("submit", (e) => {
       const errorMessage = error.message;
     });
 });
+
+//logout
+const logout = document.querySelector("#logout");
+logout.addEventListener("click", (e) => {
+  e.preventDefault();
+  signOut(auth)
+    .then(() => {
+      console.log("user has signed out");
+    })
+    .catch((error) => {
+      // An error happened.
+    });
+});
+
+function getTasks(db) {
+  const tasksRef = collection(db, "tasks");
+  const queryRef = query(tasksRef);
+  return getDocs(queryRef);
+}
+
+function setupTasks(snapshot) {
+  // Process and display tasks from the snapshot
+}
+
+function setupUI(user) {
+  // Update UI based on user authentication state
+}
+
+
