@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { getMessaging, getToken } from "firebase/messaging";
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signOut, signInWithEmailAndPassword } from "firebase/auth";
 import { addDoc, collection, getFirestore, query, getDocs } from "firebase/firestore";
 import * as firebaseui from "firebaseui";
@@ -22,6 +23,19 @@ const db = getFirestore(app);
 
 const ui = new firebaseui.auth.AuthUI(firebase.auth());
 
+const messaging = getMessaging(app);
+getToken(messaging, {vapidKey: "BOSc-d79lsM6AuG4IBfAc4RauDKcnIt0zhXqCyDFu49zyCMJf-VKuK4ApUPLoIj3A4RkwT1PSWpDmjr-mCGCInQ"});
+if (currentToken) {
+  // ...
+} else {
+  // Show permission request UI
+  console.log('No registration token available. Request permission to generate one.');
+  // ...
+}
+}).catch((err) => {
+console.log('An error occurred while retrieving token. ', err);
+// ...
+});
 onAuthStateChanged(auth, (user) => {
   // Check for user status
   // console.log(user);
@@ -128,6 +142,15 @@ function setupTasks(snapshot) {
 
 function setupUI(user) {
   // Update UI based on user authentication state
+}
+
+function requestPermission() {
+  console.log('Requesting permission...');
+  Notification.requestPermission().then((permission) => {
+    if (permission === 'granted') {
+      console.log('Notification permission granted.');
+    }
+  }
 }
 
 
